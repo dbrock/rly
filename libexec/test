@@ -1,0 +1,56 @@
+#!/bin/bash
+set -e -o pipefail
+
+test -t 1 && color=yes || color=no
+function color {
+  if test $color = yes; then
+    echo -n $'\e'"[${1}m"
+    cat
+    echo -n $'\e'"[0m"
+  else
+    cat
+  fi
+}
+
+function ok { echo -n ok | color '1;33'; echo ' - '$*; }
+function not-ok { echo -n not ok | color '1;31'; echo ' - '$*; }
+
+if test $# = 0; then
+  echo rly: error: no test files >&2
+  rly --help >&2
+  exit 1
+elif test $# -gt 1; then
+  for test; do
+    rly test "$test"
+  done
+elif ! test -f "$1"; then
+  echo rly: error: not a file: $1 >&2
+  exit 1
+elif ! test -x "$1"; then
+  echo rly: error: test file not executable: $1 >&2
+  exit 1
+elif "$1" >"$1".actual; then
+  ok $1
+  if ! test -e "$1".expected; then
+    rm "$1".actual
+  elif diff=`diff -u "$1".expected "$1".actual`; then
+    ok "$1".expected
+    rm "$1".actual
+  else
+    echo "Test output mismatch:" | color 37
+    echo "$diff"
+    not-ok "$1".expected
+    exit 1
+  fi
+else
+  status=$?
+  echo "Test exited with status code $status" | color 37
+  if test -s "$1".actual; then
+    echo "Test output ($1.actual):" | color 37
+    cat "$1".actual
+  else
+    rm "$1".actual
+  fi
+  not-ok "$1"
+  exit 1
+fi

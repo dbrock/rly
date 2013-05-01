@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e -o pipefail
+
+if test $# = 0; then
+  echo "Usage: rly test --all DIRECTORIES..." >&2
+  exit 1
+elif test $# -gt 1; then
+  for directory; do
+    rly test --all "$directory"
+  done
+elif ! test -d "$1"; then
+  echo "rly: error: not a directory: $1" >&2
+  exit 1
+else
+  find "$1" -type f -perm -+x -print0 | xargs -0 rly test
+fi

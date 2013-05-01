@@ -1,0 +1,8 @@
+{
+  "name": "rly",
+  "version": "0.0.0",
+  "bin": "bin/rly",
+  "dependencies": {
+    "plz": "~0.1.0"
+  }
+}
