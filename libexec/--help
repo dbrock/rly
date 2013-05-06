@@ -2,4 +2,17 @@
 cat <<END >&2
 Usage: rly -d TEST-DIRS...
    or: rly -f TEST-FILES...
+
+Run one or more simple, command-line tests.
+
+With \`-d', run \`rly -f' on all executable files in TEST-DIRS.
+With \`-f', execute each TEST-FILE and make sure that it exits with zero.
+
+Furthermore, if there is a file called \`TEST-FILE.expected', then also
+make sure that the stdout of that test matches this file exactly.
+
+If a test fails, save its output to \`TEST-FILE.actual' and then stop.
+The \`TEST-FILE.actual' file will be removed when the test succeeds.
+
+                                               http://github.com/dbrock/rly
 END
