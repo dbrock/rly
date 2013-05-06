@@ -14,5 +14,5 @@ make sure that the stdout of that test matches this file exactly.
 If a test fails, save its output to \`TEST-FILE.actual' and then stop.
 The \`TEST-FILE.actual' file will be removed when the test succeeds.
 
-                                               http://github.com/dbrock/rly
+                                                    //github.com/dbrock/rly
 END
